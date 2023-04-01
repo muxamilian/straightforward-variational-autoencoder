@@ -1,10 +1,10 @@
 # Straightforward Variational Autoencoder
-The Variational Autoencoder (VAE) is an autoencoder which generates a code from which samples can be drawn. 
-In order to have a code from which samples can be drawn, these criteria must be met: 
-* The values of each feature in the code must normally distributed
+The Variational Autoencoder (VAE) is an autoencoder which generates a code from which new samples can be drawn. 
+In order to have a code from which useful samples can be drawn, these criteria must be met: 
+* The values of each feature in the code must be normally distributed
 * The features of the code must not be correlated
 
-The reason for these conditions is shown late (TODO insert here)
+The reason for these conditions is shown [later](#why-regularize). 
 
 The VAE achieves this by employing a complex probabilistic framework, which I personally find unintuitive. 
 The idea of this work is to create an autoencoder that achieves the same goal as the VAE but using a more intuitive formulation. 
@@ -24,14 +24,14 @@ The **correlation regularization loss** measures how much features are correlate
 
 Why do we need the regularization losses? Wouldn't the reconstruction loss be sufficent? 
 
-The following images show the resulting image when sampling from the autoencoder's code. 
+The following images are sampled from the code of different autoencoders, which were trained using different regularization losses. 
 
 ### No regularization at all
 ![no_reg1](https://user-images.githubusercontent.com/1943719/229309768-62a0e921-cc02-4391-be5e-14d20fd5c675.png)
 ![no_reg2](https://user-images.githubusercontent.com/1943719/229309773-2bee3b22-fb50-47d1-a447-007e1295ef97.png)
 ![no_reg3](https://user-images.githubusercontent.com/1943719/229309778-4d8ff5f2-f481-41c2-92c7-c118f24e01fe.png)
 
-When not regularizing at all, the pictures are black. That's because the code is sampled assuming a standard normal distribution, with a standard deviation of 1. But in fact the code blew up with values ranging from -1000 to +1000. 
+When not regularizing at all, the pictures are black. That's because the code is sampled assuming a standard normal distribution, with a standard deviation of 1. But in fact the code blew up during with values ranging from -1000 to +1000. 
 
 ### No shape regularization
 ![no_deviation1](https://user-images.githubusercontent.com/1943719/229309798-4089c5ba-1f54-4e98-9d29-4980966a1a00.png)
@@ -51,3 +51,5 @@ When regularizing the shape of the distribution but not the correlation, results
 ![both1](https://user-images.githubusercontent.com/1943719/229309832-4c94daa1-b19c-4aa1-be0c-372a38fd5d6d.png)
 ![both2](https://user-images.githubusercontent.com/1943719/229309840-6d5d8468-71fc-45e7-ba64-a56d35cac2bf.png)
 ![both3](https://user-images.githubusercontent.com/1943719/229309848-e77f534b-cd18-4b86-8174-8aa0235ff639.png)
+
+When adding both regularization terms, one can actually sample from the code and meaningful images come out. These images are certainly not amazing but I think it shows that the proposed regularization terms somewhat work. 
