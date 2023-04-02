@@ -47,7 +47,7 @@ When not regularizing the shape of the distribution, the distribution of the aut
 
 When regularizing the shape of the distribution but not the correlation, results look better. But since we didn't regularize the correlation, it might be that we sample from the distribution in a way that the autonencoder isn't used to. For example, if *feature 5* and *feature 23* are closely correlated, but we sample *feature 5* as 1.15 and *feature 23* as -2.3, this would break the correlation which the autoencoder is used to and thus the images look bad. 
 
-### Regularizing both the shape 
+### Regularizing both the shape and the correlation
 ![both1](https://user-images.githubusercontent.com/1943719/229309832-4c94daa1-b19c-4aa1-be0c-372a38fd5d6d.png)
 ![both2](https://user-images.githubusercontent.com/1943719/229309840-6d5d8468-71fc-45e7-ba64-a56d35cac2bf.png)
 ![both3](https://user-images.githubusercontent.com/1943719/229309848-e77f534b-cd18-4b86-8174-8aa0235ff639.png)
