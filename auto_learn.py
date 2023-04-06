@@ -30,12 +30,12 @@ batch_size = 32
 n_items = sys.maxsize
 epochs = 1000
 # Dimension of the noise vector of the decoder
-code_dim = 64
+code_dim = 128
 # How many examples to generate for visualization during training
 num_examples_to_generate = 16
 # The higher, the more the training aims to produces a noise vector in the decoder which is shaped like a normal distribution
 regularization_multiplier = 0.1
-corr_regularization_multiplier = 0.1
+corr_regularization_multiplier = 1.
 
 split = 0.5
 
@@ -94,6 +94,7 @@ class CustomModel(tf.keras.Model):
 
     self.seed = tf.random.normal([batch_size, code_dim])
     self.quantiles = tf.tile(tf.reshape(tf.constant([scipy.stats.norm.ppf(item) for item in tf.cast(tf.linspace(0, 1, int(batch_size+2))[1:-1], tf.float32).numpy().tolist()], dtype=tf.float32), (batch_size, 1)), (1, code_dim))
+    print('qs', self.quantiles.shape)
 
     self.loss_tracker = tf.keras.metrics.Mean(name="loss")
     self.regularization_loss_tracker = tf.keras.metrics.Mean(name="regularization_loss")
@@ -250,15 +251,14 @@ val_ds = val_ds.batch(batch_size, drop_remainder=True).map(lambda x: x / 255.0).
 
 batches_per_epoch = len(train_ds)
 
-if args.mode == 'train':
-  logdir = "logs/" + datetime.now().strftime("%Y%m%d-%H%M%S")
-  file_writer = tf.summary.create_file_writer(logdir)
-  model.fit(x=train_ds,
-            # validation_data=val_ds,
-            epochs=epochs,
-            # shuffle=True,
-            callbacks=[
-              CustomCallback(), 
-              tf.keras.callbacks.ModelCheckpoint(
-                os.path.join(logdir, "weights.{epoch:02d}"), verbose=1, save_weights_only=True, save_best_only=False, save_freq=10*len(train_ds))
-            ])
+logdir = "logs/" + datetime.now().strftime("%Y%m%d-%H%M%S")
+file_writer = tf.summary.create_file_writer(logdir)
+model.fit(x=train_ds,
+          # validation_data=val_ds,
+          epochs=epochs,
+          # shuffle=True,
+          callbacks=[
+            CustomCallback(), 
+            tf.keras.callbacks.ModelCheckpoint(
+              os.path.join(logdir, "weights.{epoch:02d}"), verbose=1, save_weights_only=True, save_best_only=False, save_freq=10*len(train_ds))
+          ])
