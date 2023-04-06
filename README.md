@@ -22,7 +22,7 @@ The **correlation regularization loss** measures how much features are correlate
 
 ## Why regularize?
 
-Why do we need the regularization losses? Wouldn't the reconstruction loss be sufficent? 
+Why do we need the regularization losses? Wouldn't the reconstruction loss be sufficient? 
 
 The following images are sampled from the code of different autoencoders, which were trained using different regularization losses. 
 
@@ -31,21 +31,21 @@ The following images are sampled from the code of different autoencoders, which 
 ![no_reg2](https://user-images.githubusercontent.com/1943719/229309773-2bee3b22-fb50-47d1-a447-007e1295ef97.png)
 ![no_reg3](https://user-images.githubusercontent.com/1943719/229309778-4d8ff5f2-f481-41c2-92c7-c118f24e01fe.png)
 
-When not regularizing at all, the pictures are black. That's because the code is sampled assuming a standard normal distribution, with a standard deviation of 1. But in fact the code blew up during with values ranging from -1000 to +1000. 
+When not regularizing at all, the pictures are black. That's because the code is sampled assuming a standard normal distribution, with a standard deviation of 1. But in fact the code blew up during training with values ranging from -1000 to +1000. 
 
 ### No shape regularization
 ![no_deviation1](https://user-images.githubusercontent.com/1943719/229309798-4089c5ba-1f54-4e98-9d29-4980966a1a00.png)
 ![no_deviation2](https://user-images.githubusercontent.com/1943719/229309803-15b4b6f3-0fb2-4ce7-8bf0-e0d614fbbdfa.png)
 ![no_deviation3](https://user-images.githubusercontent.com/1943719/229309808-c8bae1d9-6fe1-4356-b483-0fca11e7d4c7.png)
 
-When not regularizing the shape of the distribution, the distribution of the autoencoder shifts from the standard normal distribution. Each feature follows a different distribution. When sampling from a standard normal distribution, we don't sample from the full distribution of the code and the results look bad. 
+When not regularizing the shape of the distribution, the distribution of the autoencoder starts to deviate from the standard normal distribution. Each feature then follows a different distribution. When sampling from a standard normal distribution, we don't sample from the full distribution of the code (which has a different distribution) and the results look bad. 
 
 ### No correlation regularization
 ![no_corr1](https://user-images.githubusercontent.com/1943719/229309816-2093c691-5f8c-4cde-878b-9a2bde5cafe3.png)
 ![no_corr2](https://user-images.githubusercontent.com/1943719/229309821-37021d9d-9414-4b4d-bf62-91c507f4fb15.png)
 ![no_corr3](https://user-images.githubusercontent.com/1943719/229309823-9efd4a2e-dcd0-4fec-a142-25f848c300e0.png)
 
-When regularizing the shape of the distribution but not the correlation, results look better. But since we didn't regularize the correlation, it might be that we sample from the distribution in a way that the autonencoder isn't used to. For example, if *feature 5* and *feature 23* are closely correlated, but we sample *feature 5* as 1.15 and *feature 23* as -2.3, this would break the correlation which the autoencoder is used to and thus the images look bad. 
+When regularizing the shape of the distribution but not the correlation, results look better. But since we didn't regularize the correlation, it might be that we sample from the distribution in a way that the autonencoder isn't used to. For example, if *feature 5* and *feature 23* are closely correlated, but we sample *feature 5* as 1.15 and *feature 23* as -2.3, this would break the correlation which the autoencoder is used to and thus the images look bad. Another way of explaining this is that the autoencoder learned to only use a subspace of the possible values in the code. When using the whole space of the code, it gets confused because it hasn't used all of it. 
 
 ### Regularizing both the shape and the correlation
 ![both1](https://user-images.githubusercontent.com/1943719/229309832-4c94daa1-b19c-4aa1-be0c-372a38fd5d6d.png)
@@ -53,3 +53,13 @@ When regularizing the shape of the distribution but not the correlation, results
 ![both3](https://user-images.githubusercontent.com/1943719/229309848-e77f534b-cd18-4b86-8174-8aa0235ff639.png)
 
 When adding both regularization terms, one can actually sample from the code and meaningful images come out. These images are certainly not amazing but I think it shows that the proposed regularization terms somewhat work. 
+
+## Training
+
+Use, for example, the [CelebA dataset](https://mmlab.ie.cuhk.edu.hk/projects/CelebA.html). Unpack the images to the folder `img_align_celeba`. This folder is expected to contain images, for example, jpgs. 
+
+Install the requirements in `requirements.txt` and train using 
+
+    python auto_learn.py --img-path img_align_celeba
+    
+Visualize results in Tensorboard. The logs are stored in the `logs` folder. 
