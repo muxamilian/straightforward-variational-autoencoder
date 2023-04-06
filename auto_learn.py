@@ -18,7 +18,6 @@ else:
 parser = argparse.ArgumentParser(description="Either train a model, evaluate an existing one on a dataset or run live.")
 parser.add_argument('--weights', type=str, default='', help='Path to weights, for example "logs/20220104-213105/weights.160".')
 parser.add_argument('--img-path', type=str, default='img_align_celeba', help='Folder in which the images are located')
-parser.add_argument('--mode', type=str, default='train', help='Can be "train", "live" or "video".')
 
 args = parser.parse_args()
 
