@@ -93,7 +93,6 @@ class CustomModel(tf.keras.Model):
 
     self.seed = tf.random.normal([batch_size, code_dim])
     self.quantiles = tf.tile(tf.reshape(tf.constant([scipy.stats.norm.ppf(item) for item in tf.cast(tf.linspace(0, 1, int(batch_size+2))[1:-1], tf.float32).numpy().tolist()], dtype=tf.float32), (batch_size, 1)), (1, code_dim))
-    print('qs', self.quantiles.shape)
 
     self.loss_tracker = tf.keras.metrics.Mean(name="loss")
     self.regularization_loss_tracker = tf.keras.metrics.Mean(name="regularization_loss")
