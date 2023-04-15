@@ -15,7 +15,7 @@ if physical_devices:
 else:
     print('No GPUs found')
 
-parser = argparse.ArgumentParser(description="Either train a model, evaluate an existing one on a dataset or run live.")
+parser = argparse.ArgumentParser(description="Train a model.")
 parser.add_argument('--weights', type=str, default='', help='Path to weights, for example "logs/20220104-213105/weights.160".')
 parser.add_argument('--img-path', type=str, default='img_align_celeba', help='Folder in which the images are located')
 
